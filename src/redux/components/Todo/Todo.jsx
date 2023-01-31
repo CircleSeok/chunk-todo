@@ -32,18 +32,17 @@ function Todo({ todo, isActive }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // 완료, 취소를 handling하는 함수
+  // 스위치
   const handleSwitchButton = () => {
-    const switchTodoQ = { ...todo, isDone: !todo.isDone };
-    dispatch(__switchTodoThunk(switchTodoQ));
+    dispatch(__switchTodoThunk({ ...todo, isDone: !todo.isDone }));
   };
 
-  // [삭제] 버튼 선택 시 호출되는 함수(user의 confirmation 필요)
+  // 삭제 버튼 선택 시 호출되는 함수(user의 confirmation 필요)
   const handleRemoveButton = () => {
     if (window.confirm(CONFIRM_MESSAGE)) dispatch(__deleteTodoThunk(todo.id));
   };
 
-  // [상세보기]를 선택하는 경우 이동하는 함수
+  // 상세보기를 선택하는 경우 이동하는 함수
   const handleDetailPageLinkClick = () => {
     navigate(`/${todo.id}`);
   };

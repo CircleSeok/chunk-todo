@@ -49,7 +49,7 @@ export const __switchTodoThunk = createAsyncThunk(
   'SWITCH_TODO',
   async (arg, thunkAPI) => {
     try {
-      await axios.patch(`http://localhost:4000/todos/${arg}`, arg);
+      await axios.patch(`http://localhost:4000/todos/${arg.id}`, arg);
       return thunkAPI.fulfillWithValue(arg);
     } catch (err) {
       console.log(err);
@@ -71,12 +71,6 @@ const todosSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
-    // addTodo: (state, action) => {
-    //   return [...state, action.payload];
-    // }, // action creator의 이름
-    // removeTodo: (state, action) => {
-    //   return state.filter((item) => item.id !== action.payload);
-    // }, // action creator의 이름
     switchTodo: (state, action) => {
       return state.map((item) => {
         if (item.id === action.payload) {
@@ -91,33 +85,26 @@ const todosSlice = createSlice({
     [__getTodos.fulfilled]: (state, action) => {
       state.todos = action.payload;
     },
-    [__getTodos.rejected]: (state, action) => {
-      //
-    },
+    [__getTodos.rejected]: (state, action) => {},
     [__addTodoThunk.fulfilled]: (state, action) => {
       state.todos.push(action.payload);
     },
-    [__addTodoThunk.rejected]: (state, action) => {
-      //
-    },
+    [__addTodoThunk.rejected]: (state, action) => {},
 
     [__deleteTodoThunk.fulfilled]: (state, action) => {
       state.todos = state.todos.filter((item) => item.id !== action.payload);
     },
-    [__deleteTodoThunk.rejected]: (state, action) => {
-      //
-    },
+    [__deleteTodoThunk.rejected]: (state, action) => {},
     [__switchTodoThunk.fulfilled]: (state, action) => {
       state.todos = state.todos.map((item) => {
         if (item.id === action.payload.id) {
           return { ...item, isDone: !item.isDone };
+        } else {
+          return item;
         }
-        return item;
       });
     },
-    [__switchTodoThunk.rejected]: (state, action) => {
-      //
-    },
+    [__switchTodoThunk.rejected]: (state, action) => {},
   },
 });
 
